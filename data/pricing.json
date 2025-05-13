@@ -1,0 +1,10 @@
+{
+  "sixty_minute": {
+    "members": 12,
+    "non_members": 14.5
+  },
+  "ninety_minute": {
+    "members": 14,
+    "non_members": 16.5
+  }
+}
