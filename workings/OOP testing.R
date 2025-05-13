@@ -7,4 +7,4 @@ new_group <- Group$new(
 )
 
 new_group
-new_group$price_per_lesson$members
+new_group$price_per_lesson

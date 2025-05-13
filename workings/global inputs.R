@@ -1,4 +1,6 @@
 library(jsonlite)
+
+# pricing json
 a <- list(
   sixty_minute = list(
     members = 12.00,
@@ -13,7 +15,22 @@ a <- list(
 toJSON(a, pretty = TRUE, auto_unbox = TRUE)
 write_json(
   a,
-  path = "data/price_per_lesson.json",
+  path = "data/pricing.json",
+  pretty = TRUE,
+  auto_unbox = TRUE
+)
+
+
+# global inputs
+b <- list(
+  group_coaching_hourly_court_fee = 4.70,
+  individial_coaching_hourly_court_fee = 4.70,
+  non_member_fee_per_lesson = 2.50
+)
+
+write_json(
+  b,
+  path = "data/fees.json",
   pretty = TRUE,
   auto_unbox = TRUE
 )

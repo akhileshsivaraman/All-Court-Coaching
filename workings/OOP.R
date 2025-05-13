@@ -32,14 +32,18 @@ Group <- R6Class(
       self$number_rained_off <- number_rained_off
       
       private$input_file_name <- input_file_name
+      private$fees <- read_json("data/fees.json", simplifyVector = TRUE)
+      
       private$set_group_name()
       private$set_lessons_in_term()
       private$set_price_per_lesson()
+      private$set_non_member_count()
     }
   ),
   
   private = list(
-    input_file_name = NULL,
+    input_file_name = NULL, # supplied
+    fees = NULL, # read in
     
     # methods for calculating properties/fields
     set_group_name = function(){
@@ -69,8 +73,20 @@ Group <- R6Class(
     },
     
     set_non_member_count = function(){
-      NULL
-    }
+      # add member/non-member flag
+      flagged_register <- self$register |>
+        mutate(`Cost per lesson` = Amount/lessons_in_term) |>
+        mutate(Membership = case_when(
+          `Cost per lesson` == self$price_per_lesson[["members"]] ~ "member",
+          `Cost per lesson` == self$price_per_lesson[["non_members"]] ~ "non-member"
+        ))
+      # count non-members
+      non_member_count <- flagged_register |>
+        count(Membership) |>
+        filter(Membership == "non-member") |>
+        pull(n)
+      self$non_member_count <- non_member_count
+    },
     
     set_non_member_group_fee = function(){
       NULL
