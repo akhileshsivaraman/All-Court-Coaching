@@ -7,8 +7,6 @@ library(jsonlite)
 # one of the properties is price per lesson which can be a named list of two [member_price, non_member_price] and those values are determined by the supplied session_duration
 # other properties: the register (supplied), input file name (supplied), group_name (computed), non-member count (calculated), non-member group fee (calculated), number of rained off lessons (supplied), lessons in term (calculated), session duration (supplied), number of courts used (supplied)
 
-# TODO: a print method to display various properties
-
 Group <- R6Class(
   classname = "Group",
   
@@ -21,8 +19,9 @@ Group <- R6Class(
     group_name = NULL, # computed
     price_per_lesson = NULL, # computed
     lessons_in_term = NULL, # computed
-    non_member_count = NULL, # computed - TODO
-    non_member_group_fee = NULL, # computed - TODO
+    non_member_count = NULL, # computed
+    non_member_group_fee = NULL, # computed
+    # court fee
     
     
     initialize = function(register, session_duration, number_of_courts, number_rained_off, input_file_name){
@@ -38,6 +37,7 @@ Group <- R6Class(
       private$set_lessons_in_term()
       private$set_price_per_lesson()
       private$set_non_member_count()
+      private$set_non_member_group_fee()
     }
   ),
   
@@ -89,7 +89,7 @@ Group <- R6Class(
     },
     
     set_non_member_group_fee = function(){
-      NULL
+      self$non_member_group_fee <- self$non_member_count * private$fees[["non_member_fee_per_lesson"]] * self$lessons_in_term
     }
   ),
   
