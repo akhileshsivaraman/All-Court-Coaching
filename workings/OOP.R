@@ -12,7 +12,7 @@ Group <- R6Class(
   
   public = list(
     # fields
-    register = NULL, # supplied
+    register = NULL, # supplied - might move to private
     session_duration = NULL, # supplied
     number_of_courts = NULL, # supplied
     number_rained_off = NULL, # supplied
@@ -21,9 +21,11 @@ Group <- R6Class(
     lessons_in_term = NULL, # computed
     non_member_count = NULL, # computed
     non_member_group_fee = NULL, # computed
-    # court fee
+    court_fee = NULL, # computed
+    total_group_fee = NULL, # computed
     
     
+    # methods
     initialize = function(register, session_duration, number_of_courts, number_rained_off, input_file_name){
       self$register <- register
       self$session_duration <- session_duration
@@ -38,12 +40,16 @@ Group <- R6Class(
       private$set_price_per_lesson()
       private$set_non_member_count()
       private$set_non_member_group_fee()
+      private$set_court_fee()
+      private$set_total_group_fee()
     }
   ),
   
   private = list(
+    # fields
     input_file_name = NULL, # supplied
     fees = NULL, # read in
+    
     
     # methods for calculating properties/fields
     set_group_name = function(){
@@ -75,7 +81,7 @@ Group <- R6Class(
     set_non_member_count = function(){
       # add member/non-member flag
       flagged_register <- self$register |>
-        mutate(`Cost per lesson` = Amount/lessons_in_term) |>
+        mutate(`Cost per lesson` = Amount/self$lessons_in_term) |>
         mutate(Membership = case_when(
           `Cost per lesson` == self$price_per_lesson[["members"]] ~ "member",
           `Cost per lesson` == self$price_per_lesson[["non_members"]] ~ "non-member"
@@ -90,6 +96,15 @@ Group <- R6Class(
     
     set_non_member_group_fee = function(){
       self$non_member_group_fee <- self$non_member_count * private$fees[["non_member_fee_per_lesson"]] * self$lessons_in_term
+    },
+    
+    set_court_fee = function(){
+      # lessons completed * duration * no. courts * hourly court fee
+      self$court_fee <- (self$lessons_in_term - self$number_rained_off) * self$session_duration * self$number_of_courts * private$fees[["group_coaching_hourly_court_fee"]]
+    },
+    
+    set_total_group_fee = function(){
+      self$total_group_fee <- self$court_fee + self$non_member_group_fee
     }
   ),
   
