@@ -12,7 +12,6 @@ Group <- R6Class(
   
   public = list(
     # fields
-    register = NULL, # supplied - might move to private
     session_duration = NULL, # supplied
     number_of_courts = NULL, # supplied
     number_rained_off = NULL, # supplied
@@ -27,11 +26,11 @@ Group <- R6Class(
     
     # methods
     initialize = function(register, session_duration, number_of_courts, number_rained_off, input_file_name){
-      self$register <- register
       self$session_duration <- session_duration
       self$number_of_courts <- number_of_courts
       self$number_rained_off <- number_rained_off
       
+      private$register <- register
       private$input_file_name <- input_file_name
       private$fees <- read_json("data/fees.json", simplifyVector = TRUE)
       
@@ -47,6 +46,7 @@ Group <- R6Class(
   
   private = list(
     # fields
+    register = NULL, # supplied
     input_file_name = NULL, # supplied
     fees = NULL, # read in
     
@@ -60,7 +60,7 @@ Group <- R6Class(
     },
     
     set_lessons_in_term = function(){
-      date_columns <- colnames(self$register) |>
+      date_columns <- colnames(private$register) |>
         str_detect(regex("\\d{1,2}/\\d{1,2}/\\d{2,4}"))
       lessons_in_term <- sum(date_columns, na.rm = TRUE)
       self$lessons_in_term <- lessons_in_term
@@ -80,7 +80,7 @@ Group <- R6Class(
     
     set_non_member_count = function(){
       # add member/non-member flag
-      flagged_register <- self$register |>
+      flagged_register <- private$register |>
         mutate(`Cost per lesson` = Amount/self$lessons_in_term) |>
         mutate(Membership = case_when(
           `Cost per lesson` == self$price_per_lesson[["members"]] ~ "member",
