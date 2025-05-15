@@ -68,7 +68,7 @@ file_upload_server <- function(id, groups_list){
       )
       print(new_group)
       
-      # TODO: use assign to give the Group object a relevant name
+      # TODO: use assign to give the Group object a relevant name?
       
       # put the object in a global list
       groups_list <- append(groups_list, new_group)
