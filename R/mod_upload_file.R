@@ -1,21 +1,95 @@
 #----- mod_file_upload.R -----
 library(shiny)
 library(bslib)
+source("R/Group.R")
 
 #---- file_upload_UI ----
 file_upload_UI <- function(id){
   tagList(
+    fileInput(
+      NS(id, "register_upload"),
+      label = "Upload a register",
+      multiple = FALSE,
+      accept = ".csv",
+      buttonLabel = "Upload"
+    ),
     
+    numericInput(
+      NS(id, "number_rained_off"),
+      label = "How many sessions were rained off for the group?",
+      value = 0,
+      step = 1
+    ),
+    
+    numericInput(
+      NS(id, "session_duration"),
+      label = "How long is each session?",
+      value = 1,
+      step = 0.1
+    ),
+    
+    numericInput(
+      NS(id, "number_of_courts"),
+      label = "How many courts are used for the group?",
+      value = 1,
+      min = 1,
+      step = 1
+    ),
+    
+    actionButton(
+      NS(id, "calculate_group_fees"),
+      label = "Calculate groups fees"
+    )
   )
 }
 
 #---- file_upload_server ----
-file_upload_server <- function(id){
+file_upload_server <- function(id, groups_list){
   moduleServer(id, function(input, output, session){
     
-    
+    observe({
+      req(input$register_upload)
+      
+      # read file
+      ext <- tools::file_ext(input$register_upload$name)
+      register <- switch(
+        ext,
+        csv = read_csv(input$register_upload$datapath),
+        validate("Invalid file type. Please upload a csv file.") # TODO: something more helpful and use glue to indicate the type of file that was used
+      )
+      
+      # create new Group object
+      new_group <- Group$new(
+        register = register,
+        session_duration = input$session_duration,
+        number_of_courts = input$number_of_courts,
+        number_rained_off = input$number_rained_off,
+        input_file_name = input$upload$name
+      )
+      print(new_group)
+      
+      # TODO: use assign to give the Group object a relevant name
+      
+      # put the object in a global list
+      append(groups_list, new_group)
+    }) |>
+      bindEvent(input$calculate_group_fees)
   })
 }
 
 
 #---- file_upload_app ----
+file_upload_app <- function(){
+  ui <- page_fluid(
+    file_upload_UI("file_upload")
+  )
+  
+  server <- function(input, output, session){
+    groups_list <- list()
+    file_upload_server("file_upload", groups_list = groups_list)
+  }
+  
+  shinyApp(ui, server)
+}
+
+file_upload_app()
