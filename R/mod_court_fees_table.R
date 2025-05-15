@@ -9,13 +9,27 @@ source("R/Group.R")
 #---- court_fees_table_UI ----
 court_fees_table_UI <- function(id){
   tagList(
-    actionButton(
-      NS(id, "generate_table"),
-      label = "Generate court fee table"
-    ),
-    
-    DT::dataTableOutput(
-      NS(id, "group_coaching_table")
+    card(
+      fill = FALSE,
+      
+      fluidRow(
+        column(
+          12,
+          actionButton(
+            NS(id, "generate_table"),
+            label = "Generate court fee table"
+          )
+        )
+      ),
+      
+      fluidRow(
+        column(
+          12,
+          DT::dataTableOutput(
+            NS(id, "group_coaching_table")
+          )
+        )
+      )
     )
   )
 }
@@ -93,4 +107,4 @@ court_fees_table_app <- function(){
   
   shinyApp(ui, server)
 }
-court_fees_table_app()
+# court_fees_table_app()

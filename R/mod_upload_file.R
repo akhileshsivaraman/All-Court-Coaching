@@ -6,42 +6,66 @@ source("R/Group.R")
 #---- file_upload_UI ----
 file_upload_UI <- function(id){
   tagList(
-    fileInput(
-      NS(id, "register_upload"),
-      label = "Upload a register",
-      multiple = FALSE,
-      accept = ".csv",
-      buttonLabel = "Upload"
-    ),
-    
-    numericInput(
-      NS(id, "number_rained_off"),
-      label = "How many sessions were rained off for the group?",
-      value = 0,
-      step = 1
-    ),
-    
-    numericInput(
-      NS(id, "session_duration"),
-      label = "How long is each session?",
-      value = 1,
-      step = 0.1
-    ),
-    
-    numericInput(
-      NS(id, "number_of_courts"),
-      label = "How many courts are used for the group?",
-      value = 1,
-      min = 1,
-      step = 1
-    ),
-    
-    actionButton(
-      NS(id, "calculate_group_fees"),
-      label = "Calculate groups fees"
+    card(
+      fill = FALSE,
+      
+      fluidRow(
+        column(
+          12,
+          fileInput(
+            NS(id, "register_upload"),
+            label = "Upload a register",
+            multiple = FALSE,
+            accept = ".csv",
+            buttonLabel = "Upload"
+          )
+        )
+      ),
+      
+      fluidRow(
+        column(
+          4,
+          numericInput(
+            NS(id, "number_rained_off"),
+            label = "How many sessions were rained off for the group?",
+            value = 0,
+            step = 1
+          )
+        ),
+        column(
+          4,
+          numericInput(
+            NS(id, "session_duration"),
+            label = "How long is each session?",
+            value = 1,
+            step = 0.1
+          )
+        ),
+        column(
+          4,
+          numericInput(
+            NS(id, "number_of_courts"),
+            label = "How many courts are used for the group?",
+            value = 1,
+            min = 1,
+            step = 1
+          )
+        )
+      ),
+      
+      fluidRow(
+        column(
+          12,
+          actionButton(
+            NS(id, "calculate_group_fees"),
+            label = "Calculate groups fees"
+          )
+        )
+      )
     )
   )
 }
+
 
 #---- file_upload_server ----
 file_upload_server <- function(id, groups_list){
@@ -91,5 +115,4 @@ file_upload_app <- function(){
   
   shinyApp(ui, server)
 }
-
-file_upload_app()
+# file_upload_app()
