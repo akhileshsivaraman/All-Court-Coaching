@@ -88,14 +88,13 @@ file_upload_server <- function(id, groups_list){
         session_duration = input$session_duration,
         number_of_courts = input$number_of_courts,
         number_rained_off = input$number_rained_off,
-        input_file_name = input$upload$name
+        input_file_name = input$register_upload$name
       )
-      print(new_group)
       
       # TODO: use assign to give the Group object a relevant name?
       
       # put the object in a global list
-      groups_list <- append(groups_list, new_group)
+      groups_list$group_one <- new_group
     }) |>
       bindEvent(input$calculate_group_fees)
   })
@@ -109,7 +108,7 @@ file_upload_app <- function(){
   )
   
   server <- function(input, output, session){
-    groups_list <- list()
+    groups_list <- reactiveValues()
     file_upload_server("file_upload", groups_list = groups_list)
   }
   

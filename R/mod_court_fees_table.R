@@ -62,15 +62,15 @@ court_fees_table_server <- function(id, groups_list){
       
       # generate new row
       new_row <- tibble(
-        "Group name" = groups_list[[1]]$group_name,
-        "Number of lessons" = groups_list[[1]]$lessons_in_term,
-        "Number of rained off lessons" = groups_list[[1]]$number_rained_off,
-        "Session duration (hours)" = groups_list[[1]]$session_duration,
-        "Number of courts used" = groups_list[[1]]$number_of_courts,
-        "Court fee subtotal" = groups_list[[1]]$court_fee,
-        "Number of non-members" = groups_list[[1]]$non_member_count,
-        "Non-member fee subtotal" = groups_list[[1]]$non_member_group_fee,
-        "Total fee for group" = groups_list[[1]]$total_group_fee
+        "Group name" = groups_list$group_one$group_name,
+        "Number of lessons" = groups_list$group_one$lessons_in_term,
+        "Number of rained off lessons" = groups_list$group_one$number_rained_off,
+        "Session duration (hours)" = groups_list$group_one$session_duration,
+        "Number of courts used" = groups_list$group_one$number_of_courts,
+        "Court fee subtotal" = groups_list$group_one$court_fee,
+        "Number of non-members" = groups_list$group_one$non_member_count,
+        "Non-member fee subtotal" = groups_list$group_one$non_member_group_fee,
+        "Total fee for group" = groups_list$group_one$total_group_fee
       )
       
       # bind new row
@@ -92,7 +92,7 @@ court_fees_table_app <- function(){
   
   server <- function(input, output, session){
     # create dummy data
-    groups_list <- list()
+    groups_list <- reactiveValues()
     new_group <- Group$new(
       register = register,
       session_duration = 1.5,
@@ -100,7 +100,7 @@ court_fees_table_app <- function(){
       number_rained_off = 1,
       input_file_name = "LTA-Youth-Yellow-Squad-Level-1.csv"
     )
-    groups_list <- append(groups_list, new_group)
+    groups_list <- append(groups_list, new_group) # TODO: change when PoC is generalised
     
     court_fees_table_server("court_fees_table", groups_list = groups_list)
   }
