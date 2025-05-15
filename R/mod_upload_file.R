@@ -71,7 +71,7 @@ file_upload_server <- function(id, groups_list){
       # TODO: use assign to give the Group object a relevant name
       
       # put the object in a global list
-      append(groups_list, new_group)
+      groups_list <- append(groups_list, new_group)
     }) |>
       bindEvent(input$calculate_group_fees)
   })
