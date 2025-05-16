@@ -68,7 +68,7 @@ file_upload_UI <- function(id){
 
 
 #---- file_upload_server ----
-file_upload_server <- function(id, groups_list){
+file_upload_server <- function(id, groups_list, r){
   moduleServer(id, function(input, output, session){
     
     observe({
@@ -97,6 +97,12 @@ file_upload_server <- function(id, groups_list){
       groups_list$group_one <- new_group
     }) |>
       bindEvent(input$calculate_group_fees)
+    
+    
+    # export input$calculate_group_fees
+    observe({
+      r$input_calculate_group_fees <- input$calculate_group_fees
+    })
   })
 }
 
@@ -108,8 +114,9 @@ file_upload_app <- function(){
   )
   
   server <- function(input, output, session){
+    r <- reactiveValues()
     groups_list <- reactiveValues()
-    file_upload_server("file_upload", groups_list = groups_list)
+    file_upload_server("file_upload", groups_list = groups_list, r = r)
   }
   
   shinyApp(ui, server)

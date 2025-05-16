@@ -3,8 +3,6 @@ library(shiny)
 library(bslib)
 source("R/Group.R")
 
-# take the Group object and populate a table
-# have a table to display the court fees for each group
 
 #---- court_fees_table_UI ----
 court_fees_table_UI <- function(id){
@@ -36,30 +34,28 @@ court_fees_table_UI <- function(id){
 
 
 #---- court_fees_table_server ----
-court_fees_table_server <- function(id, groups_list){
+court_fees_table_server <- function(id, groups_list, r){
   moduleServer(id, function(input, output, session){
     
-    # initialise table
-    group_coaching_table <- tibble(
-      "Group name" = character(),
-      "Number of lessons" = numeric(),
-      "Number of rained off lessons" = numeric(),
-      "Session duration (hours)" = numeric(),
-      "Number of courts used" = numeric(),
-      "Court fee subtotal" = numeric(),
-      "Number of non-members" = numeric(),
-      "Non-member fee subtotal" = numeric(),
-      "Total fee for group" = numeric()
+    # initialise table as a reactiveVal that can be modified within observers
+    group_coaching_table <- reactiveVal(
+      tibble(
+        "Group name" = character(),
+        "Number of lessons" = numeric(),
+        "Number of rained off lessons" = numeric(),
+        "Session duration (hours)" = numeric(),
+        "Number of courts used" = numeric(),
+        "Court fee subtotal" = numeric(),
+        "Number of non-members" = numeric(),
+        "Non-member fee subtotal" = numeric(),
+        "Total fee for group" = numeric()
+      )
     )
     
-    
-    # populate and display table
-    output$group_coaching_table <- DT::renderDT({
-      
-      # TODO: make this work for a longer list
-      # this is just a PoC where groups_list has one item!
-      # probably build a function that does the below and can be used with map
-      
+    # TODO: make this work for a longer list
+    # this is just a PoC where groups_list has one item!
+    # probably build a function that does the below and can be used with map
+    observe({
       # generate new row
       new_row <- tibble(
         "Group name" = groups_list$group_one$group_name,
@@ -74,12 +70,16 @@ court_fees_table_server <- function(id, groups_list){
       )
       
       # bind new row
-      group_coaching_table <- bind_rows(group_coaching_table, new_row)
-      
-      # render table
-      return(group_coaching_table)
-     }) |>
-      bindEvent(input$generate_table)
+      group_coaching_table(
+        bind_rows(group_coaching_table(), new_row)
+      )
+    }) |>
+      bindEvent(r$input_calculate_group_fees, ignoreNULL = TRUE)
+    
+    # populate table when the user clicks calculate_groups_fees in mod_upload_file
+    output$group_coaching_table <- DT::renderDT({
+      group_coaching_table()
+     })
   })
 }
 
@@ -87,10 +87,14 @@ court_fees_table_server <- function(id, groups_list){
 #---- court_fees_table_app ----
 court_fees_table_app <- function(){
   ui <- page_fluid(
+    actionButton("button",
+                 label = "Calculate group fees"
+    ),
     court_fees_table_UI("court_fees_table")
   )
   
   server <- function(input, output, session){
+    
     # create dummy data
     groups_list <- reactiveValues()
     new_group <- Group$new(
@@ -102,7 +106,10 @@ court_fees_table_app <- function(){
     )
     groups_list <- append(groups_list, new_group) # TODO: change when PoC is generalised
     
-    court_fees_table_server("court_fees_table", groups_list = groups_list)
+    r <- reactiveValues()
+    r$input_calculate_group_fees <- input$button
+    
+    court_fees_table_server("court_fees_table", groups_list = groups_list, r = r)
   }
   
   shinyApp(ui, server)

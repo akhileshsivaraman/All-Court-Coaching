@@ -25,11 +25,14 @@ all_court_coaching <- function(){
   #---- server ----
   server <- function(input, output, session){
     
+    # initialise global reactives
+    r <- reactiveValues()
+    
     # initialise global groups_list
     groups_list <- reactiveValues()
     
-    file_upload_server("file_upload", groups_list = groups_list)
-    court_fees_table_server("court_fees_table", groups_list = groups_list)
+    file_upload_server("file_upload", groups_list = groups_list, r = r)
+    court_fees_table_server("court_fees_table", groups_list = groups_list, r = r)
   }
   
   
