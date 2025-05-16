@@ -42,8 +42,8 @@ court_fees_table_server <- function(id, groups_list, r){
       )
     )
     
-    # TODO: make this work for a longer list
-    # this is just a PoC where groups_list has one item!
+    # populate table when the user clicks calculate_groups_fees in mod_upload_file
+    # TODO: make this work for a longer groups_list? This can already be used to create the court fee table row by row
     # probably build a function that does the below and can be used with map
     observe({
       # generate new row
@@ -66,7 +66,7 @@ court_fees_table_server <- function(id, groups_list, r){
     }) |>
       bindEvent(r$input_calculate_group_fees, ignoreNULL = TRUE)
     
-    # populate table when the user clicks calculate_groups_fees in mod_upload_file
+    # display
     output$group_coaching_table <- DT::renderDT({
       group_coaching_table()
      })
@@ -94,7 +94,7 @@ court_fees_table_app <- function(){
       number_rained_off = 1,
       input_file_name = "LTA-Youth-Yellow-Squad-Level-1.csv"
     )
-    groups_list <- append(groups_list, new_group) # TODO: change when PoC is generalised
+    groups_list <- append(groups_list, new_group)
     
     r <- reactiveValues()
     r$input_calculate_group_fees <- input$button

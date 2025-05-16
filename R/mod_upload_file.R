@@ -91,7 +91,7 @@ file_upload_server <- function(id, groups_list, r){
         input_file_name = input$register_upload$name
       )
       
-      # TODO: use assign to give the Group object a relevant name?
+      # TODO: use assign to give the Group object a relevant name? but what is the use case
       
       # put the object in a global list
       groups_list$group_one <- new_group
