@@ -13,16 +13,6 @@ court_fees_table_UI <- function(id){
       fluidRow(
         column(
           12,
-          actionButton(
-            NS(id, "generate_table"),
-            label = "Generate court fee table"
-          )
-        )
-      ),
-      
-      fluidRow(
-        column(
-          12,
           DT::dataTableOutput(
             NS(id, "group_coaching_table")
           )
