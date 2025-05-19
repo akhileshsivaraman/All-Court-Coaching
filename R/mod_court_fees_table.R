@@ -13,6 +13,7 @@ court_fees_table_UI <- function(id){
       fluidRow(
         column(
           12,
+          h3("Fees per group"),
           DT::dataTableOutput(
             NS(id, "group_coaching_table")
           )
