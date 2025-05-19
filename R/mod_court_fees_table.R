@@ -1,8 +1,4 @@
 #----- mod_court_fees_table.R -----
-library(shiny)
-library(bslib)
-source("R/Group.R")
-
 
 #---- court_fees_table_UI ----
 court_fees_table_UI <- function(id){

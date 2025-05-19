@@ -1,14 +1,4 @@
 #----- all_court_coaching -----
-library(shiny)
-library(bslib)
-library(R6)
-library(tidyverse)
-library(stringr)
-library(jsonlite)
-source("R/Group.R")
-source("R/mod_court_fees_table.R")
-source("R/mod_upload_file.R")
-
 
 #---- app function ----
 all_court_coaching <- function(){
