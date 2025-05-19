@@ -17,6 +17,25 @@ court_fees_table_UI <- function(id){
             NS(id, "group_coaching_table")
           )
         )
+      ),
+      
+      fluidRow(
+        column(
+          12,
+          h3("Remove a group"),
+          p("To remove a group that has been input incorrectly, select it from the dropdown below and hit remove."),
+          selectInput(
+            NS(id, "row_to_remove"), 
+            label = "Select a row to remove",
+            choices = NULL,
+            selectize = TRUE,
+            multiple = FALSE
+          ),
+          actionButton(
+            NS(id, "remove_button"),
+            label = "Remove"
+          )
+        )
       )
     )
   )
@@ -70,6 +89,30 @@ court_fees_table_server <- function(id, groups_list, r){
     output$group_coaching_table <- DT::renderDT({
       group_coaching_table()
      })
+    
+    
+    # update select input with groups in group_coaching_table
+    observe({
+      req(group_coaching_table()) # might have to use an if statement on the length of the table?
+      
+      uploaded_groups <- unique(group_coaching_table()[["Group name"]])
+      updateSelectInput(
+        session,
+        inputId = "row_to_remove",
+        choices = uploaded_groups
+      )
+    }) |>
+      bindEvent(group_coaching_table())
+    
+    # remove a row
+    observe({
+      req(group_coaching_table())
+      
+      group_coaching_table(
+        group_coaching_table() |> filter(!(`Group name` == input$row_to_remove))
+      )
+    }) |>
+      bindEvent(input$remove_button)
   })
 }
 
