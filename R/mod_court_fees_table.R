@@ -88,9 +88,9 @@ court_fees_table_server <- function(id, groups_list, r){
      })
     
     
-    # update select input with groups in group_coaching_table
+    # update select input with groups in group_coaching_table for remove row feature
     observe({
-      req(group_coaching_table()) # might have to use an if statement on the length of the table?
+      req(group_coaching_table()) # might have to use an if statement on the length of the table? but cannot remember the bug...
       
       uploaded_groups <- unique(group_coaching_table()[["Group name"]])
       updateSelectInput(

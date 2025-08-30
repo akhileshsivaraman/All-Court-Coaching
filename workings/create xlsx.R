@@ -9,8 +9,8 @@ library(openxlsx2)
 wb <- wb_workbook()
 
 
-# construct total fees table
-# make four smaller tables then stitch them together into the worksheet using dims
+# construct total fees sheet
+# make four smaller tables then stitch them together into the worksheet using dims arg
 heading_table <- data.frame(
   "Raynes Park Residents LTC" = c(
     "Invoice from the head coach for the court usage and non-member supplement",
@@ -56,12 +56,12 @@ wb$
     x = inputs_table,
     dims = "A5"
   )$
-  add_data( # add subtotal header
+  add_data( # TODO: add subtotal header
     sheet = "Total Fees",
     x = sub_totals_table,
     dims = "A9"
   )$
-  add_data( # add total header
+  add_data( # TODO: add total header / make bold
     sheet = "Total Fees",
     x = total_table,
     dims = "A13"
@@ -72,4 +72,4 @@ wb$
     x = group_coaching_table
   )
 
-wb_save(wb, file = "workings/text.xlsx")
+wb_save(wb, file = "workings/test.xlsx")
