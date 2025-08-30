@@ -1,11 +1,22 @@
 Package: All Court Coaching
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: All Court Coaching's Court Invoice Calculator
+Version: 1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Akhilesh", "Sivaraman", role = c("aut", "cre"))
+Description: All Court Coaching's Court Invoice Calculator
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.0
+Imports: 
+    bslib (>= 0.9.0),
+    dplyr (>= 1.1.4),
+    jsonlite (>= 2.0.0),
+    lubridate (>= 1.9.4),
+    openxlsx2 (>= 1.15),
+    R6 (>= 2.6.1),
+    shiny (>= 1.10.0),
+    stringr (>= 1.5.1),
+    tibble (>= 3.2.1),
+    tidyr (>= 1.3.1)
