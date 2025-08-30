@@ -40,25 +40,10 @@ court_fees_table_UI <- function(id){
 
 
 #---- court_fees_table_server ----
-court_fees_table_server <- function(id, groups_list, r){
+court_fees_table_server <- function(id, groups_list, r, group_coaching_table){
   moduleServer(id, function(input, output, session){
     
-    # initialise table as a reactiveVal that can be modified within observers
-    group_coaching_table <- reactiveVal(
-      tibble(
-        "Group name" = character(),
-        "Number of lessons" = numeric(),
-        "Number of rained off lessons" = numeric(),
-        "Session duration (hours)" = numeric(),
-        "Number of courts used" = numeric(),
-        "Court fee subtotal" = numeric(),
-        "Number of non-members" = numeric(),
-        "Non-member fee subtotal" = numeric(),
-        "Total fee for group" = numeric()
-      )
-    )
-    
-    # populate table when the user clicks calculate_groups_fees in mod_upload_file
+    # populate group_coaching_table when the user clicks calculate_groups_fees in mod_upload_file
     # TODO: make this work for a longer groups_list? This can already be used to create the court fee table row by row
     # probably build a function that does the below and can be used with map
     observe({
@@ -139,7 +124,21 @@ court_fees_table_app <- function(){
     r <- reactiveValues()
     r$input_calculate_group_fees <- input$button
     
-    court_fees_table_server("court_fees_table", groups_list = groups_list, r = r)
+    group_coaching_table <- reactiveVal(
+      tibble(
+        "Group name" = character(),
+        "Number of lessons" = numeric(),
+        "Number of rained off lessons" = numeric(),
+        "Session duration (hours)" = numeric(),
+        "Number of courts used" = numeric(),
+        "Court fee subtotal" = numeric(),
+        "Number of non-members" = numeric(),
+        "Non-member fee subtotal" = numeric(),
+        "Total fee for group" = numeric()
+      )
+    )
+    
+    court_fees_table_server("court_fees_table", groups_list = groups_list, r = r, group_coaching_table = group_coaching_table)
   }
   
   shinyApp(ui, server)

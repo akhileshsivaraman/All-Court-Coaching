@@ -23,7 +23,8 @@ create_invoice_UI <- function(id){
           
           numericInput(
             NS(id, "individual_coaching_court_fee"),
-            label = "1-to-1 coaching hours"
+            label = "1-to-1 coaching hours",
+            value = 0
           ),
           
           downloadButton(
@@ -37,23 +38,22 @@ create_invoice_UI <- function(id){
 }
 
 #---- create_invoice_server ----
-create_invoice_server <- function(id){
+create_invoice_server <- function(id, group_coaching_table){
   moduleServer(id, function(input, output, session){
     
     output$create_invoice <- downloadHandler(
       filename = function(){
         year <- year(Sys.Date())
-        paste0(input$term, "_", year, ".xlsx")
+        paste0(input$select_term, "_", year, ".xlsx")
       },
       
-      content = function(file){ # may require the group_coaching_table created in mod_court_fees_table but how to serve it up? use the r object?
+      content = function(file){
         
         #--- calculate subtotals
         group_coaching_court_fee <- sum(group_coaching_table()[["Court fee subtotal"]])
         non_member_court_fee <- sum(group_coaching_table()[["Non-member fee subtotal"]])
         fees <- read_json("data/fees.json", simplifyVector = TRUE)
         individual_coaching_court_fee <- input$individual_coaching_court_fee * fees$individial_coaching_hourly_court_fee
-        
         
         #--- construct workbook ---
         wb <- wb_workbook()
@@ -113,7 +113,7 @@ create_invoice_server <- function(id){
           add_worksheet(sheet = "Group Coaching")$
           add_data(
             sheet = "Group Coaching",
-            x = group_coaching_table
+            x = group_coaching_table()
           )
         
         wb_save(wb, file)
@@ -130,9 +130,23 @@ create_invoice_app <- function(){
   )
   
   server <- function(input, output, session){
-    source("workings/OOP testing.R")
-    source("workings/create xlsx.R")
-    create_invoice_server("create_invoice") # need inputs from the UI too
+    
+    # dummy data
+    group_coaching_table <- reactiveVal(
+      tibble(
+        "Group name" = "Dummy Group",
+        "Number of lessons" = 13,
+        "Number of rained off lessons" = 1,
+        "Session duration (hours)" = 1.5,
+        "Number of courts used" = 2,
+        "Court fee subtotal" = 100,
+        "Number of non-members" = 2,
+        "Non-member fee subtotal" = 5,
+        "Total fee for group" = 105
+      )
+    )
+    
+    create_invoice_server("create_invoice", group_coaching_table = group_coaching_table)
   }
   
   shinyApp(ui, server)
