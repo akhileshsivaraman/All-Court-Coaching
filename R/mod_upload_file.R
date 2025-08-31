@@ -7,6 +7,7 @@ file_upload_UI <- function(id){
       fill = FALSE,
       
       fluidRow(
+        h3("Upload Group"),
         column(
           12,
           fileInput(

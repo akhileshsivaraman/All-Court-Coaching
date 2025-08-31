@@ -19,7 +19,7 @@ court_fees_table_UI <- function(id){
       fluidRow(
         column(
           12,
-          h3("Remove a group"),
+          h4("Remove a group"),
           p("To remove a group that has been input incorrectly, select it from the dropdown below and hit remove."),
           selectInput(
             NS(id, "row_to_remove"), 
