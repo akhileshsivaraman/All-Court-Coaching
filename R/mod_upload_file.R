@@ -55,7 +55,7 @@ file_upload_UI <- function(id){
           12,
           actionButton(
             NS(id, "calculate_group_fees"),
-            label = "Calculate groups fees"
+            label = "Calculate group's fees"
           )
         )
       )
