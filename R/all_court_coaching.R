@@ -4,15 +4,27 @@ library(bslib)
 library(openxlsx2)
 
 #---- app function ----
+b64 <- base64enc::dataURI(file = "www/JMACC_Black_Logo.png", mime = "image/png")
+
 all_court_coaching <- function(){
   
   #---- UI ----
-  ui <- page_fluid(
-    title = "All Court Coaching",
+  ui <- page_navbar(
+    title = div(
+      img(
+        src = b64,
+        alt = "All Court Coaching Logo",
+        style = "max-width: 15%; height: auto;"
+      )
+    ),
     
-    file_upload_UI("file_upload"),
-    court_fees_table_UI("court_fees_table"),
-    create_invoice_UI("create_invoice")
+    nav_panel(
+      title = "Court Fees",
+      value = "Court Fees",
+      file_upload_UI("file_upload"),
+      court_fees_table_UI("court_fees_table"),
+      create_invoice_UI("create_invoice")
+    )
   )
   
   
@@ -43,6 +55,7 @@ all_court_coaching <- function(){
     
     
     #--- call servers ---
+    title_panel_UI("title_panel")
     file_upload_server("file_upload", groups_list = groups_list, r = r)
     court_fees_table_server("court_fees_table", groups_list = groups_list, r = r, group_coaching_table = group_coaching_table)
     create_invoice_server("create_invoice", group_coaching_table = group_coaching_table)
