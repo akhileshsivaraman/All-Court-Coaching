@@ -22,25 +22,21 @@ file_upload_UI <- function(id){
       
       fluidRow(
         column(
-          4,
+          12,
           numericInput(
             NS(id, "number_rained_off"),
             label = "How many sessions were rained off for the group?",
             value = 0,
             step = 1
-          )
-        ),
-        column(
-          4,
+          ),
+          
           numericInput(
             NS(id, "session_duration"),
             label = "How long is each session?",
             value = 1,
             step = 0.5
-          )
-        ),
-        column(
-          4,
+          ),
+          
           numericInput(
             NS(id, "number_of_courts"),
             label = "How many courts are used for the group?",
