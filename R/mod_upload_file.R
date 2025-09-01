@@ -36,7 +36,7 @@ file_upload_UI <- function(id){
             NS(id, "session_duration"),
             label = "How long is each session?",
             value = 1,
-            step = 0.1
+            step = 0.5
           )
         ),
         column(
