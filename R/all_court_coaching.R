@@ -14,7 +14,7 @@ all_court_coaching <- function(){
       img(
         src = b64,
         alt = "All Court Coaching Logo",
-        style = "max-width: 15%; height: auto;"
+        style = "max-width: 10%; height: auto;"
       )
     ),
     
@@ -55,7 +55,6 @@ all_court_coaching <- function(){
     
     
     #--- call servers ---
-    title_panel_UI("title_panel")
     file_upload_server("file_upload", groups_list = groups_list, r = r)
     court_fees_table_server("court_fees_table", groups_list = groups_list, r = r, group_coaching_table = group_coaching_table)
     create_invoice_server("create_invoice", group_coaching_table = group_coaching_table)
