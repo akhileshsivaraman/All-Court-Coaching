@@ -9,7 +9,7 @@ register <- read_csv("data/LTA-Youth-Yellow-Squad-Level-1.csv")
 #---- global inputs ----
 # stored in JSON - have an area/panel for the user to change these global values
 group_coaching_hourly_court_fee <- 4.70
-individial_coaching_hourly_court_fee <- 4.70
+individual_coaching_hourly_court_fee <- 4.70
 non_member_fee_per_lesson <- 2.50
 
 # encapsulate these into a higher level name-value pair {group_coaching: ...} or an object?

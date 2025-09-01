@@ -53,7 +53,7 @@ create_invoice_server <- function(id, group_coaching_table){
         group_coaching_court_fee <- sum(group_coaching_table()[["Court fee subtotal"]])
         non_member_court_fee <- sum(group_coaching_table()[["Non-member fee subtotal"]])
         fees <- read_json("data/fees.json", simplifyVector = TRUE)
-        individual_coaching_court_fee <- input$individual_coaching_court_fee * fees$individial_coaching_hourly_court_fee
+        individual_coaching_court_fee <- input$individual_coaching_court_fee * fees$individual_coaching_hourly_court_fee
         
         #--- construct workbook ---
         wb <- wb_workbook()
@@ -70,7 +70,7 @@ create_invoice_server <- function(id, group_coaching_table){
         inputs_table <- data.frame(
           "Term" = input$select_term,
           "Court fee per hour of group coaching" = fees$group_coaching_hourly_court_fee,
-          "Court fee per hour of 1-2-1 coaching" = fees$individial_coaching_hourly_court_fee,
+          "Court fee per hour of 1-2-1 coaching" = fees$individual_coaching_hourly_court_fee,
           "Fee per non-member per lesson" = fees$non_member_fee_per_lesson,
           check.names = FALSE
         )

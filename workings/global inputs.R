@@ -24,7 +24,7 @@ write_json(
 # global inputs
 b <- list(
   group_coaching_hourly_court_fee = 4.70,
-  individial_coaching_hourly_court_fee = 4.70,
+  individual_coaching_hourly_court_fee = 4.70,
   non_member_fee_per_lesson = 2.50
 )
 

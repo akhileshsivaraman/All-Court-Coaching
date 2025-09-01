@@ -24,7 +24,7 @@ term <- "Summer" # set term programmatically?
 inputs_table <- data.frame(
   "Term" = term,
   "Court fee per hour of group coaching" = fees$group_coaching_hourly_court_fee,
-  "Court fee per hour of 1-2-1 coaching" = fees$individial_coaching_hourly_court_fee,
+  "Court fee per hour of 1-2-1 coaching" = fees$individual_coaching_hourly_court_fee,
   "Fee per non-member per lesson" = fees$non_member_fee_per_lesson,
   check.names = FALSE
 )
